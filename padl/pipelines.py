@@ -6,7 +6,6 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import sqlite3
 import logging
-import re
 from logging.config import fileConfig
 import os
 
@@ -26,7 +25,7 @@ class AmazonPipeline(object):
         self.logger = logging.getLogger(__name__)
         
     def setupDBCon(self):
-        self.con = sqlite3.connect(os.getcwd() + '/test.db')
+        self.con = sqlite3.connect(os.getcwd() + '/amazon.db')
         self.cur = self.con.cursor()
     
     def createTables(self):

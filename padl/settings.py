@@ -10,13 +10,13 @@ from scrapy.settings.default_settings import ITEM_PIPELINES
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'amazon'
+BOT_NAME = 'padl'
 
 SPIDER_MODULES = ['padl.spiders']
 NEWSPIDER_MODULE = 'padl.spiders'
 
 ITEM_PIPELINES = {
-    'amazon.pipelines.AmazonPipeline': 0
+    'padl.pipelines.AmazonPipeline': 0
     }
 
 USER_AGENT= 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
@@ -56,6 +56,7 @@ COOKIES_ENABLED=False
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
+#    'scrapy.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
 #    'amazon.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
@@ -89,3 +90,22 @@ COOKIES_ENABLED=False
 #HTTPCACHE_DIR='httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES=[]
 #HTTPCACHE_STORAGE='scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# Retry many times since proxies often fail
+RETRY_TIMES = 10
+# Retry on most error codes since proxies fail for different reasons
+RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
+
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': 90,
+    # Fix path to this module
+    'padl.randomproxy.RandomProxy': 100,
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
+}
+
+# Proxy list containing entries like
+# http://host1:port
+# http://username:password@host2:port
+# http://host3:port
+# ...
+PROXY_LIST = 'padl/config/proxy_list.txt'
