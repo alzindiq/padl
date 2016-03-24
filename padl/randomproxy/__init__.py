@@ -2,6 +2,7 @@ import re
 import random
 import base64
 
+# adapted from https://github.com/aivarsk/scrapy-proxies
 
 class RandomProxy(object):
     def __init__(self, settings):

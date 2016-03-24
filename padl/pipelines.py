@@ -44,9 +44,9 @@ class AmazonPipeline(object):
         
     def createAmazonTable(self):
         self.cur.execute("CREATE TABLE IF NOT EXISTS Amazon(id INTEGER PRIMARY KEY NOT NULL, \
-            name TEXT, \
-            path TEXT, \
-            source TEXT \
+            asin TEXT, \
+            price TEXT, \
+            category TEXT \
             )")
     
     
@@ -56,15 +56,15 @@ class AmazonPipeline(object):
 
     def storeInDb(self,item):
         self.cur.execute("INSERT INTO Amazon(\
-            name, \
-            path, \
-            source \
+            asin, \
+            price, \
+            category \
             ) \
         VALUES( ?, ?, ?)", \
         ( \
-            item.get('Name',''),
-            item.get('Path',''),
-            item.get('Source','')
+            item.get('Asin',''),
+            item.get('Price',''),
+            item.get('Category','')
         ))
         print '------------------------'
         print 'Data Stored in Database'

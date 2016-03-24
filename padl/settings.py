@@ -17,7 +17,7 @@ NEWSPIDER_MODULE = 'padl.spiders'
 
 ITEM_PIPELINES = {
     'padl.pipelines.AmazonPipeline': 0
-    }
+}
 
 USER_AGENT= 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
 
@@ -55,10 +55,13 @@ COOKIES_ENABLED=False
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'scrapy.downloadermiddleware.httpproxy.HttpProxyMiddleware': None,
-#    'amazon.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+    'padl.randomua.RandomUserAgentMiddleware': 400,
+    'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': 90,
+    #'padl.randomproxy.RandomProxy': 100,
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -96,16 +99,11 @@ RETRY_TIMES = 10
 # Retry on most error codes since proxies fail for different reasons
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 404, 408]
 
-DOWNLOADER_MIDDLEWARES = {
-    'scrapy.contrib.downloadermiddleware.retry.RetryMiddleware': 90,
-    # Fix path to this module
-    'padl.randomproxy.RandomProxy': 100,
-    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
-}
-
 # Proxy list containing entries like
 # http://host1:port
 # http://username:password@host2:port
 # http://host3:port
 # ...
 PROXY_LIST = 'padl/config/proxy_list.txt'
+
+USER_AGENT_LIST = 'padl/config/user_agent_list.txt'

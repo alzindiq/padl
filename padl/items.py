@@ -9,8 +9,7 @@ from scrapy.item import Item, Field
 
 
 class AmazonItem(Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
 
-    #name of item
-    ASIN = Field()
+    Asin = Field()
+    Price = Field()
+    Category = Field()

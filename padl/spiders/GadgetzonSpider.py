@@ -25,12 +25,10 @@ class GadgetzonSpider(scrapy.Spider):
     def start_requests(self):
         yield scrapy.Request(self.seedUrl, self.parse)
 
-
     def parse(self, response):
         urls = response.xpath('//div[contains(@class,"zg_title")]//a/@href').extract()
         for url in urls:
             yield scrapy.Request(str(url).strip(),self.parseItem)
-
 
     def parseItem(self,response):
         print response
