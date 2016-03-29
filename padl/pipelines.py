@@ -6,7 +6,6 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import sqlite3
 import logging
-from logging.config import fileConfig
 import os
 
 con = None
@@ -16,13 +15,7 @@ class AmazonPipeline(object):
     def __init__(self):
         self.setupDBCon()
         self.createTables()
-        thisDir = os.path.abspath(os.path.dirname(__file__))
-        logConfigFile = os.path.join(thisDir, 'config', 'logging_config.ini')
-        self.setup_logger(logConfigFile)
-
-    def setup_logger(self, logConfigFile):
-        fileConfig(logConfigFile)
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger('padl')
         
     def setupDBCon(self):
         self.con = sqlite3.connect(os.getcwd() + '/amazon.db')
@@ -33,7 +26,6 @@ class AmazonPipeline(object):
         self.createAmazonTable()
     
     def dropAmazonTable(self):
-        #drop amazon table if it exists
         self.cur.execute("DROP TABLE IF EXISTS Amazon")
     
     def closeDB(self):
@@ -46,7 +38,8 @@ class AmazonPipeline(object):
         self.cur.execute("CREATE TABLE IF NOT EXISTS Amazon(id INTEGER PRIMARY KEY NOT NULL, \
             asin TEXT, \
             price TEXT, \
-            category TEXT \
+            category TEXT, \
+            url TEXT \
             )")
     
     
@@ -58,15 +51,14 @@ class AmazonPipeline(object):
         self.cur.execute("INSERT INTO Amazon(\
             asin, \
             price, \
-            category \
+            category, \
+            url \
             ) \
-        VALUES( ?, ?, ?)", \
+        VALUES( ?, ?, ?, ?)", \
         ( \
             item.get('Asin',''),
             item.get('Price',''),
-            item.get('Category','')
+            item.get('Category',''),
+            item.get('Url','')
         ))
-        print '------------------------'
-        print 'Data Stored in Database'
-        print '------------------------'
         self.con.commit()       

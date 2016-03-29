@@ -13,3 +13,4 @@ class AmazonItem(Item):
     Asin = Field()
     Price = Field()
     Category = Field()
+    Url = Field()
